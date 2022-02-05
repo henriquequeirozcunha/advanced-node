@@ -1,7 +1,7 @@
 import { LoadFacebookUserApi } from '@/data/contracts/apis'
 import { TokenGenerator } from '@/data/contracts/crypto'
 import { LoadUserAccountRepository, SaveFacebookAccountRepository } from '@/data/contracts/repos'
-import { FacebookAuthenticationService } from '@/data/serivces'
+import { FacebookAuthenticationService } from '@/data/services'
 import { AuthenticationError } from '@/domain/errors'
 import { FacebookAccount } from '@/domain/models'
 
