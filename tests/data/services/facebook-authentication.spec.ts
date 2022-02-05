@@ -65,6 +65,14 @@ describe('FacebookAuthenticationService', () => {
     expect(userAccountRepo.saveWithFacebook).toHaveBeenCalledTimes(1)
   })
 
+  it('should call SaveFacebookAccountRepo with an instance of FacebookAccount', async () => {
+    mocked(FacebookAccount).mockImplementation()
+
+    await sut.perform({ token })
+
+    expect(userAccountRepo.saveWithFacebook).toHaveBeenCalledWith(expect.any(FacebookAccount))
+  })
+
   it('should call TokenGenerator with correct params', async () => {
     await sut.perform({ token })
 
