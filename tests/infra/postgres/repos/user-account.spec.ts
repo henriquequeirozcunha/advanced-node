@@ -43,7 +43,7 @@ describe('PgUserAccountRepository', () => {
 
   describe('saveWithFacebook', () => {
     it('should crate an account if id is undefined', async () => {
-      await sut.saveWithFacebook({
+      const account = await sut.saveWithFacebook({
         email: 'any_email',
         name: 'any_name',
         facebookId: 'any_facebook_id'
@@ -52,6 +52,7 @@ describe('PgUserAccountRepository', () => {
       const pgUser = await pgUserRepo.findOne({ email: 'any_email' })
 
       expect(pgUser?.id).toBe(1)
+      expect(account.id).toBe('1')
     })
 
     it('should crate an account if id is undefined', async () => {
