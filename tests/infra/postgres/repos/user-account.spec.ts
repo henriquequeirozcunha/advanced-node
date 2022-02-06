@@ -1,6 +1,6 @@
 import { PgUser } from '@/infra/postgres/entities'
-import { PgUserAccountRepository } from '@/infra/postgres/entities/repos'
 import { makeFakeDb } from '@/tests/infra/postgres/mocks'
+import { PgUserAccountRepository } from '@/infra/postgres/repos'
 
 import { IBackup } from 'pg-mem'
 import { getConnection, getRepository, Repository } from 'typeorm'
