@@ -14,11 +14,17 @@ export class RequiredFieldError extends Error {
     this.name = 'RequiredFieldError'
   }
 }
-
 export class UnauthorizedError extends Error {
   constructor () {
     super('Unauthorized')
 
     this.name = 'UnauthorizedError'
+  }
+}
+export class ForbiddenError extends Error {
+  constructor () {
+    super('Access Denied')
+
+    this.name = 'ForbiddenError'
   }
 }
