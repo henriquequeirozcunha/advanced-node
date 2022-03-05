@@ -1,4 +1,4 @@
-import { LoadFacebookUserApi } from '@/domain/contracts/apis'
+import { LoadFacebookUser } from '@/domain/contracts/gateways'
 import { TokenGenerator } from '@/domain/contracts/crypto'
 import { LoadUserAccountRepository, SaveFacebookAccountRepository } from '@/domain/contracts/repos'
 import { setupFacebookAuthentication, FacebookAuthentication } from '@/domain/services'
@@ -17,7 +17,7 @@ describe('FacebookAuthentication', () => {
     email: 'any_facebook_email',
     facebookId: 'any_facebook_id'
   }
-  let facebookApi: MockProxy<LoadFacebookUserApi>
+  let facebookApi: MockProxy<LoadFacebookUser>
   let userAccountRepo: MockProxy<LoadUserAccountRepository & SaveFacebookAccountRepository>
   let crypto: MockProxy<TokenGenerator>
   let sut: FacebookAuthentication
@@ -36,14 +36,14 @@ describe('FacebookAuthentication', () => {
     sut = setupFacebookAuthentication(facebookApi, userAccountRepo, crypto)
   })
 
-  it('should call LoadFacebookUserApi with correct params', async () => {
+  it('should call LoadFacebookUser with correct params', async () => {
     await sut({ token })
 
     expect(facebookApi.loadUser).toHaveBeenCalledWith({ token })
     expect(facebookApi.loadUser).toHaveBeenCalledTimes(1)
   })
 
-  it('should throw AuthenticationError when LoadFacebookUserApi returns undefined', async () => {
+  it('should throw AuthenticationError when LoadFacebookUser returns undefined', async () => {
     facebookApi.loadUser.mockResolvedValueOnce(undefined)
 
     const promise = sut({ token })
@@ -51,7 +51,7 @@ describe('FacebookAuthentication', () => {
     await expect(promise).rejects.toThrow(new AuthenticationError())
   })
 
-  it('should call LoadUserAccountRepo when LoadFacebookUserApi returns data', async () => {
+  it('should call LoadUserAccountRepo when LoadFacebookUser returns data', async () => {
     await sut({ token })
 
     expect(userAccountRepo.load).toHaveBeenCalledWith({ email: facebookAccount.email })
@@ -90,7 +90,7 @@ describe('FacebookAuthentication', () => {
     expect(authResult).toEqual({ accessToken: 'any_generated_token' })
   })
 
-  it('should rethrow if LoadFacebookUserApi throws', async () => {
+  it('should rethrow if LoadFacebookUser throws', async () => {
     facebookApi.loadUser.mockRejectedValueOnce(new Error('fb_error'))
 
     const promise = sut({ token })
