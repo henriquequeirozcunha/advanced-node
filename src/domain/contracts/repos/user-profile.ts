@@ -4,5 +4,5 @@ export interface SaveUserPictureRepository {
 }
 
 export namespace SaveUserPictureRepository {
-  export type Input = { pictureUrl: string }
+  export type Input = { pictureUrl?: string }
 }
