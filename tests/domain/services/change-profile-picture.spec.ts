@@ -4,7 +4,7 @@ import { ChangeProfilePicture, setupChangeProfilePicture } from '@/domain/servic
 
 describe('ChangeProfilePicture', () => {
   let uuid: string
-  let file: Buffer
+  let file: Buffer | undefined
   let fileStorage: MockProxy<UploadFile>
   let crypto: MockProxy<UUIDGenerator>
   let sut: ChangeProfilePicture
@@ -26,5 +26,11 @@ describe('ChangeProfilePicture', () => {
 
     expect(fileStorage.upload).toHaveBeenCalledWith({ file, key: uuid })
     expect(fileStorage.upload).toHaveBeenCalledTimes(1)
+  })
+
+  it('should not call UploadFile when file is undefined', async () => {
+    await sut({ userId: 'any_user_id', file: undefined })
+
+    expect(fileStorage.upload).not.toHaveBeenCalled()
   })
 })
