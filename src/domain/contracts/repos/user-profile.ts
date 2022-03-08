@@ -4,13 +4,14 @@ export interface SaveUserPictureRepository {
 }
 
 export namespace SaveUserPictureRepository {
-  export type Input = { pictureUrl?: string }
+  export type Input = { pictureUrl?: string, initials?: string }
 }
 
 export interface LoadUserProfileRepository {
-  load: (input: LoadUserProfileRepository.Input) => Promise<void>
+  load: (input: LoadUserProfileRepository.Input) => Promise<LoadUserProfileRepository.Output>
 }
 
 export namespace LoadUserProfileRepository {
   export type Input = { id: string }
+  export type Output = { name?: string }
 }
