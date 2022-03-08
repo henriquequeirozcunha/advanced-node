@@ -42,7 +42,7 @@ describe('ChangeProfilePicture', () => {
   it('should call SaveUserPictureRepository with correct input', async () => {
     await sut({ userId: 'any_user_id', file })
 
-    expect(userProfileRepo.savePicture).toHaveBeenCalledWith({ pictureUrl: 'any_url' })
+    expect(userProfileRepo.savePicture).toHaveBeenCalledWith({ pictureUrl: 'any_url', initials: undefined })
     expect(userProfileRepo.savePicture).toHaveBeenCalledTimes(1)
   })
 
