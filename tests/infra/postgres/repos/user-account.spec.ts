@@ -3,7 +3,7 @@ import { makeFakeDb } from '@/tests/infra/postgres/mocks'
 import { PgUserAccountRepository } from '@/infra/postgres/repos'
 
 import { IBackup } from 'pg-mem'
-import { getConnection, getRepository, Repository } from 'typeorm'
+import { getConnection, getRepository, Repository, createConnection } from 'typeorm'
 
 describe('PgUserAccountRepository', () => {
   let sut: PgUserAccountRepository
@@ -11,13 +11,14 @@ describe('PgUserAccountRepository', () => {
   let backup: IBackup
 
   beforeEach(() => {
-    backup.restore()
+    // backup.restore()
     sut = new PgUserAccountRepository()
   })
 
   beforeAll(async () => {
-    const db = await makeFakeDb([PgUser])
-    backup = db.backup()
+    // const db = await makeFakeDb([PgUser])
+    // backup = db.backup()
+    (await import('../../../../src/main'))
     pgUserRepo = getRepository(PgUser)
   })
 

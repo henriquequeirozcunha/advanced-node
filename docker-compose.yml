@@ -1,0 +1,24 @@
+version: "3"
+services:
+    tests:
+        build: .
+        depends_on:
+          - db
+        container_name: api-test-container
+        working_dir: /app
+        restart: always
+        command: bash -c "npm install -g jest && npm run test"
+
+    db:
+      container_name: postgres-api-test
+      image: postgres
+      restart: always
+      environment:
+        POSTGRES_PASSWORD: some_password
+        POSTGRES_USER: some_user
+        POSTGRES_DB: test
+      volumes:
+            - ./pgdata:/var/lib/postgresql/data
+      ports:
+            - "5432:5432"
+
