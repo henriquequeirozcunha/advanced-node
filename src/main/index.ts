@@ -7,6 +7,6 @@ import { createConnection } from 'typeorm'
 
 createConnection().then(() =>
   app.listen(env.appPort, () => {
-    // console.log(`Server running at http://localhost:${env.appPort}`)
+    console.log(`Server running at http://localhost:${env.appPort}`)
   })
 ).catch(console.error)
