@@ -3,7 +3,7 @@ import { UploadFile } from '@/domain/contracts/gateways'
 import { config, S3 } from 'aws-sdk'
 import { mocked } from 'ts-jest/utils'
 
-class AwsS3FileStorage {
+class AwsS3FileStorage implements UploadFile {
   constructor (
     accessKey: string,
     secret: string,
@@ -17,7 +17,7 @@ class AwsS3FileStorage {
     })
   }
 
-  async upload ({ file, key }: UploadFile.Input): Promise<void> {
+  async upload ({ file, key }: UploadFile.Input): Promise<UploadFile.Output> {
     const s3 = new S3()
 
     await s3.putObject({
@@ -26,6 +26,8 @@ class AwsS3FileStorage {
       Body: file,
       ACL: 'public-read'
     }).promise()
+
+    return `https://${this.bucket}.s3.amazonaws.com/${encodeURIComponent(key)}`
   }
 }
 
@@ -80,5 +82,17 @@ describe('AwsS3FileStorage', () => {
     })
     expect(putObjectSpy).toHaveBeenCalledTimes(1)
     expect(putObjectPromiseSpy).toHaveBeenCalledTimes(1)
+  })
+
+  it('should return image url', async () => {
+    const imageUrl = await sut.upload({ file, key })
+
+    expect(imageUrl).toBe(`https://${bucket}.s3.amazonaws.com/${key}`)
+  })
+
+  it('should return encoded image url', async () => {
+    const imageUrl = await sut.upload({ file, key: 'any key' })
+
+    expect(imageUrl).toBe(`https://${bucket}.s3.amazonaws.com/any%20key`)
   })
 })
