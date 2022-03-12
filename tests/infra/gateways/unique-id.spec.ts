@@ -1,4 +1,4 @@
-import { UniqueId } from '@/infra/crypto'
+import { UniqueId } from '@/infra/gateways'
 
 import { set, reset } from 'mockdate'
 
