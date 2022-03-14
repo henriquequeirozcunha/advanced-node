@@ -13,5 +13,5 @@ export interface LoadUserProfileRepository {
 
 export namespace LoadUserProfileRepository {
   export type Input = { id: string }
-  export type Output = { name?: string }
+  export type Output = { name?: string } | undefined
 }

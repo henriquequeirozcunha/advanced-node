@@ -1,7 +1,7 @@
 import { UnauthorizedError } from '@/application/errors'
-import { PgUser } from '@/infra/postgres/entities'
+import { PgUser } from '@/infra/repos/postgres/entities'
 import { app } from '@/main/config/app'
-import { makeFakeDb } from '@/tests/infra/postgres/mocks'
+import { makeFakeDb } from '@/tests/infra/repos/postgres/mocks'
 
 import { IBackup } from 'pg-mem'
 import request from 'supertest'
@@ -11,7 +11,7 @@ describe('Login Routes', () => {
   const loadUserSpy = jest.fn()
   let backup: IBackup
 
-  jest.mock('@/infra/apis/facebook', () => ({
+  jest.mock('@/infra/gateways/facebook-api', () => ({
     FacebookApi: jest.fn().mockReturnValue({
       loadUser: loadUserSpy
     })

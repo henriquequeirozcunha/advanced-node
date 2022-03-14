@@ -1,6 +1,6 @@
-import { PgUser } from '@/infra/postgres/entities'
-import { makeFakeDb } from '@/tests/infra/postgres/mocks'
-import { PgUserAccountRepository } from '@/infra/postgres/repos'
+import { PgUser } from '@/infra/repos/postgres/entities'
+import { makeFakeDb } from '@/tests/infra/repos/postgres/mocks'
+import { PgUserAccountRepository } from '@/infra/repos/postgres'
 
 import { IBackup } from 'pg-mem'
 import { getConnection, getRepository, Repository } from 'typeorm'
@@ -71,7 +71,7 @@ describe('PgUserAccountRepository', () => {
 
       const pgUser = await pgUserRepo.findOne({ id: 1 })
 
-      expect(pgUser).toEqual({
+      expect(pgUser).toMatchObject({
         id: 1,
         email: 'any_email',
         name: 'new_name',
