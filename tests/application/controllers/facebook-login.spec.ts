@@ -25,7 +25,7 @@ describe('FacebookLoginController', () => {
   })
 
   it('should return build Validators corretly', async () => {
-    const validators = await sut.buildValidators({ token })
+    const validators = sut.buildValidators({ token })
 
     expect(validators).toEqual([
       new RequiredString('any_token', 'token')
