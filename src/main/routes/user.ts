@@ -6,4 +6,5 @@ import { auth } from '@/main/middlewares'
 
 export default (router: Router): void => {
   router.delete('/users/picture', auth, adapt(makeSaveProfilePictureController()))
+  router.put('/users/picture', auth)
 }
