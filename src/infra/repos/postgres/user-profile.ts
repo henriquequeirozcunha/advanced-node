@@ -15,6 +15,6 @@ export class PgUserProfileRepository implements SaveUserPictureRepository, LoadU
 
     const pgUser = await pgUserRepo.findOne({ id: parseInt(id) })
 
-    if (pgUser !== undefined) return { name: pgUser.name }
+    if (pgUser !== undefined) return { name: pgUser.name ?? undefined }
   }
 }
