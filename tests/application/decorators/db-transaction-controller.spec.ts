@@ -1,4 +1,4 @@
-import { mock } from 'jest-mock-extended'
+import { mock, MockProxy } from 'jest-mock-extended'
 
 class DbTransactionController {
   constructor (private readonly db: DbTransaction) {}
@@ -13,9 +13,20 @@ interface DbTransaction {
 }
 
 describe('DbTransactionController', () => {
+  let db: MockProxy<DbTransaction>
+  let sut: DbTransactionController
+
+  beforeAll(() => {
+    db = mock()
+  })
+
+  beforeEach(() => {
+    sut = new DbTransactionController(db)
+  })
+
   it('should open transaction', async () => {
-    const db = mock<DbTransaction>()
-    const sut = new DbTransactionController(db)
+    db = mock<DbTransaction>()
+    sut = new DbTransactionController(db)
 
     await sut.perform({ any: 'any' })
 
