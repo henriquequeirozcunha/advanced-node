@@ -1,7 +1,9 @@
 version: "3"
 services:
     tests:
-        build: .
+        build:
+          context: .
+          dockerfile: Dockerfile
         depends_on:
           - db
         container_name: api-test-container
@@ -14,8 +16,11 @@ services:
             - db
 
     db:
+      image: db
       container_name: postgres-api-test
-      image: postgres
+      build:
+        context: .
+        dockerfile: Dockerfile_db
       restart: always
       environment:
         POSTGRES_PASSWORD: some_password
@@ -23,6 +28,7 @@ services:
         POSTGRES_DB: test
       volumes:
             - ./pgdata:/var/lib/postgresql/data
+            - ./dumps:/dumps
       ports:
             - "5432:5432"
 
