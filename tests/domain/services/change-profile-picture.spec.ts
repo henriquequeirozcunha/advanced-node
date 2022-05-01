@@ -10,7 +10,9 @@ jest.mock('@/domain/models/user-profile')
 
 describe('ChangeProfilePicture', () => {
   let uuid: string
-  let file: Buffer | undefined
+  let file: { buffer: Buffer, mimeType: string }
+  let buffer: Buffer
+  let mimeType: string
   let fileStorage: MockProxy<UploadFile & DeleteFile>
   let crypto: MockProxy<UUIDGenerator>
   let userProfileRepo: MockProxy<SaveUserPictureRepository & LoadUserProfileRepository>
@@ -18,7 +20,9 @@ describe('ChangeProfilePicture', () => {
 
   beforeAll(() => {
     uuid = 'any_unique_id'
-    file = Buffer.from('any_buffer')
+    buffer = Buffer.from('any_buffer')
+    mimeType = 'image/png'
+    file = { buffer, mimeType }
     fileStorage = mock()
     fileStorage.upload.mockResolvedValue('any_url')
     crypto = mock()
@@ -32,9 +36,16 @@ describe('ChangeProfilePicture', () => {
   })
 
   it('should call UploadFile with correct input', async () => {
-    await sut({ userId: 'any_user_id', file })
+    await sut({ userId: 'any_user_id', file: { buffer, mimeType: 'image/png' } })
 
-    expect(fileStorage.upload).toHaveBeenCalledWith({ file, key: uuid })
+    expect(fileStorage.upload).toHaveBeenCalledWith({ file: file.buffer, fileName: `${uuid}.png` })
+    expect(fileStorage.upload).toHaveBeenCalledTimes(1)
+  })
+
+  it('should call UploadFile with correct input', async () => {
+    await sut({ userId: 'any_user_id', file: { buffer, mimeType: 'image/jpeg' } })
+
+    expect(fileStorage.upload).toHaveBeenCalledWith({ file: file.buffer, fileName: `${uuid}.jpeg` })
     expect(fileStorage.upload).toHaveBeenCalledTimes(1)
   })
 
@@ -45,6 +56,15 @@ describe('ChangeProfilePicture', () => {
   })
 
   it('should call SaveUserPictureRepository with correct input', async () => {
+    await sut({ userId: 'any_user_id', file })
+
+    expect(userProfileRepo.savePicture).toHaveBeenCalledWith(mocked(UserProfile).mock.instances[0])
+    expect(userProfileRepo.savePicture).toHaveBeenCalledTimes(1)
+  })
+
+  it('should call SaveUserPictureRepository with correct input', async () => {
+    userProfileRepo.load.mockResolvedValueOnce(undefined)
+
     await sut({ userId: 'any_user_id', file })
 
     expect(userProfileRepo.savePicture).toHaveBeenCalledWith(mocked(UserProfile).mock.instances[0])
@@ -87,7 +107,7 @@ describe('ChangeProfilePicture', () => {
     const promise = sut({ userId: 'any_user_id', file })
 
     promise.catch(() => {
-      expect(fileStorage.delete).toHaveBeenCalledWith({ key: uuid })
+      expect(fileStorage.delete).toHaveBeenCalledWith({ fileName: uuid })
       expect(fileStorage.delete).toHaveReturnedTimes(1)
     })
   })
